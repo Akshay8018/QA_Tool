@@ -13,7 +13,7 @@ router = APIRouter(prefix="/v1/chat", tags=["chat"])
 @router.post("/message", response_model=ChatMessageResponse)
 async def post_chat_message(request: ChatMessageRequest) -> ChatMessageResponse:
     controller = ChatControllerService(session_repository=session_store)
-    result = controller.process_message(
+    result = await controller.process_message(
         session_id=request.session_id,
         message=request.message,
         flow_stage=request.flow_stage,

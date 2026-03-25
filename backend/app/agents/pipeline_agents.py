@@ -52,8 +52,14 @@ class PlannerAgent:
             f"Target URL: {request.target_url or 'target URL from instruction'}\n"
             "Output JSON only. No markdown."
         )
-        llm_text, route = await self.router.complete_with_fallback(prompt)
-        route_data = route.__dict__
+        try:
+            llm_text, route = await self.router.complete_with_fallback(prompt)
+            route_data = route.__dict__
+        except Exception as exc:
+            # Fail-open: if no LLM providers are reachable, return deterministic plan
+            # so preview/run endpoints never 500 due to missing external LLM connectivity.
+            logger.warning("Planner LLM call failed; using deterministic plan error=%s", exc)
+            return self._fallback_plan(request, f"LLM failure: {exc}", {})
         parsed = self._extract_json_payload(llm_text)
         if not parsed:
             logger.warning("Planner returned non-JSON output; falling back to deterministic plan")

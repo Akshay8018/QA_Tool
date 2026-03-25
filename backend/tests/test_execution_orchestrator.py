@@ -201,7 +201,7 @@ class ExecutionOrchestratorTests(unittest.IsolatedAsyncioTestCase):
     async def test_preview_enriches_request_with_rag_when_enabled(self) -> None:
         delegate = _DelegateCaptureRequest()
         orchestrator = ExecutionOrchestrator(delegate=delegate, web_rag_service=_RAGServiceStub(), web_rag_enabled=True)
-        request = TestRequest(instruction="test login flow")
+        request = TestRequest(instruction="test login flow", target_url="https://example.com")
         await orchestrator.preview_cases(request)
         assert delegate.seen_request is not None
         self.assertIn("rag_context", delegate.seen_request.test_data)

@@ -74,7 +74,14 @@ class ExecutionOrchestrator:
     async def _enrich_with_rag(self, request: TestRequest) -> TestRequest:
         if not self.web_rag_enabled:
             return request
-        rag_payload = await self.web_rag_service.retrieve(request.instruction, top_k=5)
+        # Avoid unnecessary (and flaky) web calls when we don't know the target URL.
+        instruction_l = request.instruction.lower()
+        has_url = bool(request.target_url) or "http://" in instruction_l or "https://" in instruction_l
+        if not has_url:
+            return request
+
+        query = request.target_url or request.instruction
+        rag_payload = await self.web_rag_service.retrieve(query, top_k=5)
         merged_test_data = {
             **request.test_data,
             "rag_context": rag_payload.get("chunks", []),

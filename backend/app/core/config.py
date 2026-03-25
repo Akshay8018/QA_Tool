@@ -25,7 +25,7 @@ class Settings(BaseSettings):
     session_sqlite_path: str = "data/sessions.db"
     qa_memory_backend: str = "sqlite"
     qa_memory_sqlite_path: str = "data/qa_memory.db"
-    web_rag_enabled: bool = False
+    web_rag_enabled: bool = True
     web_rag_search_max_results: int = 5
     web_rag_chunk_size: int = 700
     web_rag_chunk_overlap: int = 120
