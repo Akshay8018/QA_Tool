@@ -1,0 +1,32 @@
+### Node / Next.js
+node_modules/
+frontend/node_modules/
+frontend/.next/
+.next/
+
+### Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.pytest_cache/
+.coverage
+htmlcov/
+.mypy_cache/
+
+### Environment / secrets
+.env
+.env.*
+
+### Local sqlite / generated runtime data
+data/
+**/data/
+*.db
+
+### Logs
+*.log
+logs/
+
+### OS
+.DS_Store
+
